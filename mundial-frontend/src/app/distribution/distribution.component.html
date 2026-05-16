@@ -1,0 +1,441 @@
+<div class="container-fluid app-container py-4">
+
+  <!-- TITULO -->
+
+  <div class="text-center mb-4">
+
+    <h1 class="main-title">
+      Sistema Mundial
+    </h1>
+
+    <p class="subtitle">
+      Gestión de equipos, grupos y distribución automática
+    </p>
+
+  </div>
+
+  <!-- FORMULARIOS -->
+
+  <div class="row mb-4">
+
+    <!-- CREAR GRUPO -->
+
+    <div class="col-6 col-lg-6 col-xl-5 col-xxl-4 col-md-6">
+
+      <div class="custom-card h-100">
+
+        <div class="card-title-custom">
+          Crear Grupo
+        </div>
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            Nombre grupo
+          </label>
+
+          <input
+            type="text"
+            class="form-control custom-input"
+            [(ngModel)]="newGroup.groupName">
+
+        </div>
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            Descripción
+          </label>
+
+          <input
+            type="text"
+            class="form-control custom-input"
+            [(ngModel)]="newGroup.description">
+
+        </div>
+
+        <button
+          class="btn btn-primary custom-btn w-100"
+          (click)="saveGroup()">
+
+          Guardar Grupo
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- CREAR EQUIPO -->
+
+    <div class="col-6 col-lg-6 col-xl-5 col-xxl-4 col-md-6">
+
+      <div class="custom-card h-100">
+
+        <div class="card-title-custom">
+          Crear Equipo
+        </div>
+
+        <div class="row">
+
+          <div class="col-12 mb-3">
+
+            <label class="form-label">
+              País
+            </label>
+
+            <input
+              type="text"
+              class="form-control custom-input"
+              [(ngModel)]="newTeam.countryName">
+
+          </div>
+
+          <div class="col-6 mb-3">
+
+            <label class="form-label">
+              FIFA CÓDIGO
+            </label>
+
+            <input
+              type="text"
+              maxlength="3"
+              class="form-control custom-input"
+              [(ngModel)]="newTeam.fifaCode">
+
+          </div>
+
+          <div class="col-6 mb-3">
+
+            <label class="form-label">
+              Ranking
+            </label>
+
+            <input
+              type="number"
+              class="form-control custom-input"
+              [(ngModel)]="newTeam.fifaRanking">
+
+          </div>
+
+          <div class="col-12 mb-3">
+
+            <label class="form-label">
+              Coach
+            </label>
+
+            <input
+              type="text"
+              class="form-control custom-input"
+              [(ngModel)]="newTeam.coach">
+
+          </div>
+
+          <div class="col-12 mb-3">
+
+            <label class="form-label">
+              Jugadores
+            </label>
+
+            <input
+              type="number"
+              class="form-control custom-input"
+              [(ngModel)]="newTeam.registeredPlayers">
+
+          </div>
+
+        </div>
+
+        <button
+          class="btn btn-success custom-btn w-100"
+          (click)="saveTeam()">
+
+          Guardar Equipo
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- GENERAR DISTRIBUCION -->
+
+  <div class="custom-card mb-4">
+
+    <div class="row g-3 align-items-end">
+
+      <div class="col-12 col-md-4">
+
+        <label class="form-label fw-bold">
+          Cantidad de grupos
+        </label>
+
+        <input
+          type="number"
+          class="form-control custom-input"
+          [(ngModel)]="numberOfGroups">
+
+      </div>
+
+      <div class="col-12 col-md-8">
+
+        <div class="d-grid d-md-flex gap-3">
+
+          <button
+            class="btn btn-primary custom-btn"
+            (click)="generatePreview()">
+
+            Generar Asignación
+
+          </button>
+
+          <button
+            class="btn btn-success custom-btn"
+            [disabled]="previewGroups.length === 0"
+            (click)="saveDistribution()">
+
+            Guardar Distribución
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+    <div class="row g-4">
+
+    <div
+      class="col-12 col-md-6 col-lg-4 col-xl-3"
+      *ngFor="let assignment of previewGroups">
+
+      <div class="preview-card h-100">
+
+        <div class="preview-header">
+
+          {{ assignment.group.groupName }}
+
+        </div>
+
+        <div class="preview-body">
+
+          <div
+            class="team-preview-item"
+            *ngFor="let team of assignment.teams">
+
+            <div class="fw-bold">
+              {{ team.countryName }}
+            </div>
+
+            <div class="small text-muted">
+              {{ team.fifaCode }}
+              - Ranking {{ team.fifaRanking }}
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TABLAS -->
+
+  <div class="row g-4 mb-4">
+
+    <!-- EQUIPOS -->
+
+    <div class="col-12 col-xl-8">
+
+      <div class="custom-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+          <div class="card-title-custom m-0">
+            Equipos Registrados
+          </div>
+
+          <span class="badge-count">
+            {{ teams.length }} equipos
+          </span>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table custom-table">
+
+            <thead>
+
+            <tr>
+              <th>País</th>
+              <th>FIFA</th>
+              <th>Coach</th>
+              <th>Ranking</th>
+              <th>Jugadores</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr *ngFor="let team of teams">
+
+              <td>{{ team.countryName }}</td>
+              <td>{{ team.fifaCode }}</td>
+              <td>{{ team.coach }}</td>
+              <td>{{ team.fifaRanking }}</td>
+              <td>{{ team.registeredPlayers }}</td>
+
+            </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- GRUPOS -->
+
+    <div class="col-12 col-xl-4">
+
+      <div class="custom-card h-100">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+          <div class="card-title-custom m-0">
+            Grupos Registrados
+          </div>
+
+          <span class="badge-count">
+            {{ groups.length }} grupos
+          </span>
+
+        </div>
+
+        <div
+          class="group-item"
+          *ngFor="let group of groups">
+
+          <div class="fw-bold">
+            {{ group.groupName }}
+          </div>
+
+          <div class="text-muted small">
+            {{ group.description || 'Sin descripción' }}
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <div class="custom-card mt-4 mb-4">
+
+  <div class="row align-items-end g-3">
+
+    <div class="col-md-4">
+
+      <label class="form-label fw-bold">
+
+        Buscar distribución por ID
+
+      </label>
+
+      <input
+        type="number"
+        class="form-control custom-input"
+        [(ngModel)]="searchDistributionId"
+        (ngModelChange)="onSearchChange()">
+
+    </div>
+
+    <div class="col-md-4">
+
+      <button
+        class="btn btn-primary custom-btn w-100"
+        (click)="searchDistribution()">
+
+        Buscar Distribución
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="custom-card mt-4">
+
+  <div class="card-title-custom">
+    Historial de Distribuciones
+  </div>
+
+  <div
+    class="distribution-history mb-4"
+    *ngFor="let distribution of savedDistributions">
+
+    <div class="d-flex justify-content-between mb-3">
+
+      <div>
+
+        <strong>
+          Distribución #{{ distribution.distributionId }}
+        </strong>
+
+      </div>
+
+      <div class="text-muted">
+
+        {{ distribution.createdAt | date:'short' }}
+
+      </div>
+
+    </div>
+
+    <div class="row g-3">
+
+      <div
+        class="col-md-3"
+        *ngFor="let group of distribution.groups">
+
+        <div class="group-item">
+
+          <div class="fw-bold mb-2">
+            {{ group.group.groupName }}
+          </div>
+
+          <div
+            class="small"
+            *ngFor="let team of group.teams">
+
+            • {{ team.countryName }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>
