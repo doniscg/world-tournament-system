@@ -3,4 +3,5 @@ export const environment = {
 
     //LOCAL
     URL: 'http://localhost:8080/mundial'
+
 };
